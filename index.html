@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Minecraft Server</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #000;
+            font-family: 'Orbitron', monospace;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+            gap: 3rem;
+        }
+
+        .logo {
+            font-size: clamp(4rem, 18vw, 16rem);
+            font-weight: 900;
+            color: #00ff88;
+            text-shadow:
+                    0 0 10px #00ff88,
+                    0 0 20px #00ff88,
+                    0 0 30px #00ff88,
+                    0 0 40px #00ff88;
+            text-align: center;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .top-row {
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .bottom-row {
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .button {
+            flex: 1;
+            max-width: 260px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .info-button {
+            width: 220px;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .button:hover::before {
+            left: 100%;
+        }
+
+        .button:hover {
+            transform: scale(1.1) translateY(-5px);
+            border-color: #00ff88;
+            box-shadow:
+                    0 15px 40px rgba(0, 255, 136, 0.4),
+                    0 0 25px rgba(0, 255, 136, 0.3);
+        }
+
+        .button:active {
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #00ff88;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 70px rgba(0, 255, 136, 0.3);
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            text-align: center;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 2rem;
+            color: #00ff88;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .modal-body {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            min-height: 250px;
+            padding: 1rem 0;
+            text-align: left;
+        }
+
+        .close {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 3rem;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.3s;
+            font-weight: 300;
+        }
+
+        .close:hover {
+            color: #00ff88;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1.5rem;
+                gap: 2rem;
+            }
+
+            .top-row,
+            .bottom-row {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .button {
+                max-width: none;
+                height: 70px;
+            }
+
+            .info-button {
+                width: 200px;
+            }
+
+            .buttons-container {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+
+            .logo {
+                margin-top: 1rem;
+            }
+
+            .button {
+                height: 65px;
+            }
+
+            .info-button {
+                width: 180px;
+            }
+        }
+
+        /* High DPI / 1440p+ optimization */
+        @media (min-width: 1440px) {
+            .logo {
+                font-size: 18rem;
+            }
+
+            .top-row,
+            .bottom-row {
+                gap: 3rem;
+            }
+
+            .button {
+                height: 100px;
+                font-size: 1.5rem;
+            }
+
+            .info-button {
+                width: 280px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <div class="logo">EQ</div>
+
+    <div class="buttons-container">
+        <div class="top-row">
+            <button class="button" onclick="openModal('esport')">
+                E-Sport
+            </button>
+            <button class="button" onclick="openModal('minecraft')">
+                Minecraft Server
+            </button>
+        </div>
+
+        <div class="bottom-row">
+            <button class="button" onclick="openModal('shop')">
+                Shop
+            </button>
+            <button class="button" onclick="openModal('business')">
+                Business
+            </button>
+        </div>
+
+        <div class="info-row">
+            <button class="button info-button" onclick="openModal('info')">
+                Info
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="esportModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('esport')">&times;</span>
+        <div class="modal-header">E-Sport</div>
+        <div class="modal-body" id="esportContent">
+            Paste your E-Sport content here...
+        </div>
+    </div>
+</div>
+
+<div id="minecraftModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('minecraft')">&times;</span>
+        <div class="modal-header">Minecraft Server</div>
+        <div class="modal-body" id="minecraftContent">
+            Paste your Minecraft Server content here...
+        </div>
+    </div>
+</div>
+
+<div id="shopModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('shop')">&times;</span>
+        <div class="modal-header">Shop</div>
+        <div class="modal-body" id="shopContent">
+            Paste your Shop content here...
+        </div>
+    </div>
+</div>
+
+<div id="businessModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('business')">&times;</span>
+        <div class="modal-header">Business</div>
+        <div class="modal-body" id="businessContent">
+            Paste your Business content here...
+        </div>
+    </div>
+</div>
+
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('info')">&times;</span>
+        <div class="modal-header">Info</div>
+        <div class="modal-body" id="infoContent">
+            Paste your Info content here...
+        </div>
+    </div>
+</div>
+
+<script>
+    const content = {
+        esport: `Paste your E-Sport content here...`,
+        minecraft: `Paste your Minecraft Server content here...`,
+        shop: `Paste your Shop content here...`,
+        business: `Paste your Business content here...`,
+        info: `Paste your Info content here...`
+    };
+
+    function openModal(type) {
+        document.getElementById(type + 'Modal').style.display = 'block';
+        document.getElementById(type + 'Content').textContent = content[type];
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(type) {
+        document.getElementById(type + 'Modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+            document.body.style.overflow = 'auto';
+        }
+    });
+</script>
+</body>
+</html>
