@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EQ Minecraft Server</title>
+    <title>Strona Team EQ</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
@@ -21,6 +25,14 @@
             overflow-x: hidden;
             position: relative;
         }
+
+        #bg-img {
+            top: px;
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+
 
         body::before {
             content: '';
@@ -45,7 +57,7 @@
             padding: 2rem;
             position: relative;
             z-index: 2;
-            gap: 3rem;
+            gap: 2rem;
         }
 
         .logo {
@@ -58,10 +70,47 @@
                     0 0 30px #00ff88,
                     0 0 40px #00ff88;
             text-align: center;
-            animation: glow 2s ease-in-out infinite alternate;
+
         }
 
+        .lang-toggle {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
 
+        .lang-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lang-btn.active {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.1);
+            border-color: #00ff88;
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+        }
 
         .buttons-container {
             display: flex;
@@ -214,9 +263,20 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .lang-toggle {
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .lang-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 0.8rem;
+            }
+
             .main-container {
                 padding: 1.5rem;
-                gap: 2rem;
+                gap: 1.5rem;
             }
 
             .top-row,
@@ -233,10 +293,6 @@
             .info-button {
                 width: 200px;
             }
-
-            .buttons-container {
-                gap: 1.5rem;
-            }
         }
 
         @media (max-width: 480px) {
@@ -245,8 +301,9 @@
                 gap: 1.5rem;
             }
 
-            .logo {
-                margin-top: 1rem;
+            .lang-toggle {
+                top: 0.8rem;
+                right: 0.8rem;
             }
 
             .button {
@@ -279,34 +336,49 @@
                 height: 100px;
                 font-size: 1.5rem;
             }
+
+            .lang-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
+<div class="lang-toggle">
+    <button class="lang-btn active" id="langEN" onclick="setLanguage('en')">EN</button>
+    <button class="lang-btn" id="langPL" onclick="setLanguage('pl')">PL</button>
+</div>
+
+
+
+
 <div class="main-container">
-    <div class="logo">EQ</div>
+    <img src="image.png" id="bg-img">
+    <p style="font-size: 80px;">Team EQ</p>
 
     <div class="buttons-container">
         <div class="top-row">
-            <button class="button" onclick="openModal('esport')">
+            <button class="button" onclick="openModal('esport')" data-en="E-Sport" data-pl="E-Sport">
                 E-Sport
             </button>
-            <button class="button" onclick="openModal('minecraft')">
+            <button class="button" onclick="openModal('minecraft')" data-en="Minecraft Server" data-pl="Serwer Minecraft">
                 Minecraft Server
             </button>
         </div>
 
         <div class="bottom-row">
-            <button class="button" onclick="openModal('shop')">
+            <button class="button" onclick="openModal('shop')" data-en="Shop" data-pl="Sklep">
                 Shop
             </button>
-            <button class="button" onclick="openModal('business')">
+            <button class="button" onclick="openModal('business')" data-en="Business" data-pl="Biznes">
                 Business
             </button>
         </div>
 
         <div class="info-row">
-            <button class="button info-button" onclick="openModal('info')">
+            <button class="button info-button" onclick="openModal('info')" data-en="Info" data-pl="Info">
                 Info
             </button>
         </div>
@@ -317,7 +389,7 @@
 <div id="esportModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('esport')">&times;</span>
-        <div class="modal-header">E-Sport</div>
+        <div class="modal-header" data-en="E-Sport" data-pl="E-Sport">E-Sport</div>
         <div class="modal-body" id="esportContent">
             Paste your E-Sport content here...
         </div>
@@ -327,7 +399,7 @@
 <div id="minecraftModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('minecraft')">&times;</span>
-        <div class="modal-header">Minecraft Server</div>
+        <div class="modal-header" data-en="Minecraft Server" data-pl="Serwer Minecraft">Minecraft Server</div>
         <div class="modal-body" id="minecraftContent">
             Paste your Minecraft Server content here...
         </div>
@@ -337,7 +409,7 @@
 <div id="shopModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('shop')">&times;</span>
-        <div class="modal-header">Shop</div>
+        <div class="modal-header" data-en="Shop" data-pl="Sklep">Shop</div>
         <div class="modal-body" id="shopContent">
             Paste your Shop content here...
         </div>
@@ -347,7 +419,7 @@
 <div id="businessModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('business')">&times;</span>
-        <div class="modal-header">Business</div>
+        <div class="modal-header" data-en="Business" data-pl="Biznes">Business</div>
         <div class="modal-body" id="businessContent">
             Paste your Business content here...
         </div>
@@ -357,7 +429,7 @@
 <div id="infoModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('info')">&times;</span>
-        <div class="modal-header">Info</div>
+        <div class="modal-header" data-en="Info" data-pl="Info">Info</div>
         <div class="modal-body" id="infoContent">
             Paste your Info content here...
         </div>
@@ -365,17 +437,49 @@
 </div>
 
 <script>
-    const content = {
-        esport: `Paste your E-Sport content here...`,
-        minecraft: `Paste your Minecraft Server content here...`,
-        shop: `Paste your Shop content here...`,
-        business: `Paste your Business content here...`,
-        info: `Paste your Info content here...`
+    const translations = {
+        en: {
+            esport: `Paste your E-Sport content here...\n\nProfessional competitive gaming section.\nJoin our tournaments and climb the leaderboards!`,
+            minecraft: `Paste your Minecraft Server content here...\n\nIP: play.edq.net\nVersion: 1.20+\n\nJoin the ultimate Minecraft experience!`,
+            shop: `Paste your Shop content here...\n\nPurchase ranks, cosmetics, and more!\n\ntebex.io/edq`,
+            business: `Paste your Business content here...\n\nSponsorship opportunities\nPartnership inquiries\nContact: business@edq.net`,
+            info: `Paste your Info content here...\n\nServer Discord: discord.gg/edq\nSupport: support@edq.net\nRules: edq.net/rules`
+        },
+        pl: {
+            esport: `Wklej tutaj treść E-Sport...\n\nProfesjonalna sekcja sportów elektronicznych.\nDołącz do naszych turniejów i wspinaj się w rankingach!`,
+            minecraft: `Wklej tutaj treść Serwera Minecraft...\n\nIP: play.edq.net\nWersja: 1.20+\n\nDołącz do najlepszego doświadczenia Minecraft!`,
+            shop: `Wklej tutaj treść Sklepu...\n\nKup rangi, kosmetyki i więcej!\n\ntebex.io/edq`,
+            business: `Wklej tutaj treść Biznes...\n\nMożliwości sponsoringu\nZapytania partnerskie\nKontakt: business@edq.net`,
+            info: `Wklej tutaj treść Info...\n\nDiscord serwera: discord.gg/edq\nWsparcie: support@edq.net\nRegulamin: edq.net/regulamin`
+        }
     };
+
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+
+        // Update language buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`lang${lang.toUpperCase()}`).classList.add('active');
+
+        // Update all translatable elements
+        document.querySelectorAll('[data-en]').forEach(el => {
+            el.textContent = el.getAttribute(`data-${lang}`);
+        });
+
+        // Update modal contents
+        Object.keys(translations[lang]).forEach(type => {
+            const contentEl = document.getElementById(type + 'Content');
+            if (contentEl) {
+                contentEl.textContent = translations[lang][type];
+            }
+        });
+    }
 
     function openModal(type) {
         document.getElementById(type + 'Modal').style.display = 'block';
-        document.getElementById(type + 'Content').textContent = content[type];
+        document.getElementById(type + 'Content').textContent = translations[currentLang][type];
         document.body.style.overflow = 'hidden';
     }
 
@@ -399,6 +503,9 @@
             document.body.style.overflow = 'auto';
         }
     });
+
+    // Initialize with English
+    setLanguage('en');
 </script>
 </body>
 </html>
