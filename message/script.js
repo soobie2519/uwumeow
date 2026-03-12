@@ -8,7 +8,7 @@ function getIP(json) {
 
     console.log("email:", email, "message:", message); // Check these exist
 
-    fetch("https://discord.com/api/webhooks/1481383598044086302/BRulxsCALTaXTD0gLr1S3B5LbZXyMv8Yg66uEGZr0a2si6oAAWsKpKALo5womG30N9XR", {
+    fetch("https://discord.com/api/webhooks/1481739081531785370/iu_xLKPD5fRW7k634XgBE1RZmuBhRCf0g31G-Dk2J-VtqIKh4rOGm_gAgo_Kmi-t0VFU", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -44,4 +44,5 @@ function submit_button() {
 function doNothing() {
     print("e")
 }
+
 
