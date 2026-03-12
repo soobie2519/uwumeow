@@ -1,15 +1,7 @@
-function submit_button() {
-    let userIP = "";
 
-    fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => {
-            userIP = data.ip;  // Now saved!
-            console.log('IP saved:', userIP);
-        });
-
-
-
+function getIP(json) {
+    let userIP = json.ip;
+    console.log('Got IP:', userIP);
     document.getElementById("submit").onclick = "doNothing()";
     let email = document.getElementById("email").value
     let message = document.getElementById("message").value
@@ -36,6 +28,16 @@ function submit_button() {
     setTimeout(() => {
         window.location.href = "/";
     }, 4500);
+
+}
+
+
+
+function submit_button() {
+
+    let script = document.createElement('script');
+    script.src = 'https://api.ipify.org?format=jsonp&callback=getIP';
+    document.head.appendChild(script);
 
 }
 
