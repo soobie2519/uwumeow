@@ -21,7 +21,8 @@ function submit_button() {
 
     setTimeout(() => {
             window.location.href = "/"
-        }, 1400);
+        }, 2400);
 }
+
 
 
