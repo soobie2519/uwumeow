@@ -19,5 +19,8 @@ function submit_button() {
         document.getElementById("notifications-container").style.visibility = "visible";
     }, 150);
 
-    window.location.href = "/";
+    setTimeout(() => {
+            window.location.href = "/"
+        }, 400);
 }
+
