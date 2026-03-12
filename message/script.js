@@ -1,4 +1,15 @@
 function submit_button() {
+    let userIP = "";
+
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+            userIP = data.ip;  // Now saved!
+            console.log('IP saved:', userIP);
+        });
+
+
+
     document.getElementById("submit").onclick = "doNothing()";
     let email = document.getElementById("email").value
     let message = document.getElementById("message").value
@@ -10,7 +21,7 @@ function submit_button() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             content: message || "e",
-            username: email || "hi"
+            username: email || userIP
         })
     })
         .then(res => res.json())
