@@ -15,4 +15,9 @@ function submit_button() {
         .then(data => console.log(data))  // Shows Discord's exact error
         .catch(err => console.error(err));
 
+    setTimeout(() => {
+        document.getElementById("notifications-container").style.visibility = "visible";
+    }, 150);
+
+    window.location.href = "/";
 }
